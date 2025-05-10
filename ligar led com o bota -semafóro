@@ -100,3 +100,27 @@ void main_entry(void) {
 
     while(1);
 }
+tudo em baixo disso é para melhor entendimento
+//Valor original: 50ms
+
+
+vTaskDelay(pdMS_TO_TICKS(DEBOUNCE_DELAY_MS)); // Debounce
+Cenários Possíveis:
+Valor do Debounce	Efeito no Sistema
+Aumentar (ex: 100ms)	- Vantagem: Filtra mais ruídos (mais confiável).
+- Desvantagem: O botão parece "lento" (demora para responder após pressionado).
+Diminuir (ex: 20ms)	- Vantagem: Resposta mais rápida do botão.
+- Desvantagem: Risco de registros falsos (flicker do LED).
+Zerar (0ms)	- Sem filtro: LED pode piscar várias vezes com um único toque (ruído mecânico é lido como eventos reais).
+2. Alterando o Tempo de Polling (POLLING_DELAY_MS)
+Valor original: 10ms
+
+c
+vTaskDelay(pdMS_TO_TICKS(POLLING_DELAY_MS)); // Polling
+Cenários Possíveis:
+Valor do Polling	Efeito no Sistema
+Aumentar (ex: 50ms)	- Vantagem: Economiza CPU (menos verificações).
+- Desvantagem: Pode perder pressionamentos rápidos (ex: toque de <50ms).
+Diminuir (ex: 5ms)	- Vantagem: Detecta pressionamentos muito curtos.
+- Desvantagem: Aumenta o uso da CPU (menos eficiente).
+Zerar (0ms)	- Esgota a CPU: A Task1 fica em loop infinito, bloqueando outras tarefas (sistema travado).
